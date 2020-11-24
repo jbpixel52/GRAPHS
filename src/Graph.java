@@ -1,42 +1,40 @@
+
+import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
-import java.util.Collections;
-/**
- * graph
- */
-public class Graph<T extends Comparable<T>> {
-    ArrayList<ArrayList<T>> myList; 
-    public T V;
-    
-    public Vertex<T> start;
 
-    public Graph(T value){
-        T V = value;
-        myList = new ArrayList<ArrayList<T> >(V);
-    }
-  
-    public Vertex<T> search(T value) {
-        
-        return new Vertex<T>();
+public class Graph {
+    private Map<Vertex, List<Vertex>> adjVertices;
+
+    void addVertex(String label) {
+        adjVertices.putIfAbsent(new Vertex(label), new ArrayList<>());
     }
 
-    public void addVertex(Vertex<T> movedIn){
-        
-
-    }
-    
-    public void addEdge(Edge<T> newEdge,Vertex<T> to){
-        
-    }
-    
-    public boolean areNeighbors(Vertex<T> A, Vertex<T> B) {
-        return true;
+    void removeVertex(String label) {
+        Vertex v = new Vertex(label);
+        adjVertices.values().stream().forEach(e -> e.remove(v));
+        adjVertices.remove(new Vertex(label));
     }
 
-    public ArrayList Neighbors(Vertex<T> A) {
-
-        return new ArrayList<T>();
+    void addEdge(T label1, T label2) {
+        Vertex v1 = new Vertex(label1);
+        Vertex v2 = new Vertex(label2);
+        adjVertices.get(v1).add(v2);
+        adjVertices.get(v2).add(v1);
     }
-    
 
-    
+    void removeEdge(String label1, String label2) {
+        Vertex v1 = new Vertex(label1);
+        Vertex v2 = new Vertex(label2);
+        List<Vertex> eV1 = adjVertices.get(v1);
+        List<Vertex> eV2 = adjVertices.get(v2);
+        if (eV1 != null)
+            eV1.remove(v2);
+        if (eV2 != null)
+            eV2.remove(v1);
+    }
+    List<Vertex> getAdjVertices(String label) {
+        return adjVertices.get(new Vertex(label));
+    }
 }
+// standard constructor, getters, setters
