@@ -69,7 +69,7 @@ public class App {
 
     graph.removeBoth("a");
     graph.printGraph();
-    graph.DFS();
+    //graph.DFS();
 
     graph.areTheyNeighbors("e", "b");
 }
