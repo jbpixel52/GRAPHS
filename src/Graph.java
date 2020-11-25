@@ -1,10 +1,13 @@
 import java.util.*;
-
+/*//TODO para que el DFS funcione despues de un remove,
+se tiene que restar y quitar -1 al Hashmap de Indexes, para
+que no lo viaje el DFS  
+*/
 public class Graph<T extends Comparable<T>> {
-    public int counter=0;
+    private int counter=0;
     HashMap<T, LinkedList<T>> adjList = new HashMap<>();
     HashMap<T, Integer> indexes = new HashMap<>();
-    int index = -1;
+    public int index = -1;
 
     public Graph(ArrayList<T> vertices) {
         for (int i = 0; i < vertices.size(); i++) {
@@ -14,7 +17,12 @@ public class Graph<T extends Comparable<T>> {
             indexes.put(vertex, ++index);
         }
     }
-
+    public int getCounter() {
+        return counter;
+    }
+    public void addCounter() {
+        this.counter++;
+    }
     public void addEdge(T start, T end) {
         LinkedList<T> list;
         list = adjList.get(start);
@@ -80,5 +88,54 @@ public class Graph<T extends Comparable<T>> {
             System.out.println();
         }
     }
+
+    public void removeAllVertex(T toDelete){
+        //Removes all edeges of said vertex, if added at the end, can also delete vertex
+        Set<T> set = adjList.keySet();
+        Iterator<T> iterator = set.iterator();
+
+        while (iterator.hasNext()) {
+            T vertex = iterator.next();
+            if (vertex.compareTo(toDelete) == 0){
+                //System.out.println("VERTEX IS THE ONE TO DELETE!");
+                //adjList.remove(toDelete);
+            }
+            LinkedList<T> list = adjList.get(vertex);
+            int listSize = list.size();
+            for (int i = 0; i <listSize; i++) {
+                //System.out.println("List Size="+list.size());
+                //System.out.println("Nada que hacer");
+                if (list.get(i).compareTo(toDelete)==0) {
+                    list.remove(i);
+                    this.counter--;
+                    listSize = list.size();
+
+                    System.out.println("edge conected to deleted vertex deleted..");
+                    //AQUI SE REPONE LA LISTA ACTUALIZADA DESPUES DE CADA DELETE
+                    adjList.put(vertex, list);
+                    adjList.replace(vertex, list);
+                }
+            }
+            
+        }
+    }
+    public void removeBoth(T toDelete){
+        //Removes all edges of node and then said node
+        removeAllVertex(toDelete);
+        this.adjList.remove(toDelete);
+    }
+    public boolean areTheyNeighbors(T a, T b){
+        //son vecinos? quien sabe no>
+        LinkedList<T> aList = adjList.get(a);
+        LinkedList<T> bList = adjList.get(b);
+        if(aList.contains(b) || bList.contains(a)){
+            System.out.println("si son vecinos!");
+            return true;
+        }
+        else    System.out.println("no son vecinos");
+        return false;
+    }
+
+
 
 }
